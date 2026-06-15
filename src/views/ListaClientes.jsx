@@ -8,11 +8,38 @@ import {
   TableRow,
   Paper,
   TextField,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 
 function ListaClientes() {
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const obtenerClientes = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+
+        const respuesta = await fetch(
+          "https://fakestoreapi.com/users"
+        );
+
+        const data = await respuesta.json();
+
+        setClientes(data);
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    obtenerClientes();
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/users")
@@ -29,6 +56,31 @@ function ListaClientes() {
     return apellido.includes(texto) || ciudad.includes(texto);
   });
 
+  // Estado de carga
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "50px",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  // Estado de error
+  if (error) {
+    return (
+      <Alert severity="error">
+        Error al cargar los clientes.
+      </Alert>
+    );
+  }
+
+  // Estado de éxito
   return (
     <>
       <h2>Lista de Clientes</h2>
