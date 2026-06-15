@@ -40,6 +40,12 @@ function ListaClientes() {
     };
 
     obtenerClientes();
+
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/users")
+      .then((res) => res.json())
+      .then((data) => setClientes(data))
+      .catch((error) => console.error(error));
   }, []);
 
   const clientesFiltrados = clientes.filter((cliente) => {
