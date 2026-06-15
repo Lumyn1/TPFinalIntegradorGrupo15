@@ -40,12 +40,6 @@ function ListaClientes() {
     };
 
     obtenerClientes();
-
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/users")
-      .then((res) => res.json())
-      .then((data) => setClientes(data))
-      .catch((error) => console.error(error));
   }, []);
 
   const clientesFiltrados = clientes.filter((cliente) => {
@@ -56,7 +50,6 @@ function ListaClientes() {
     return apellido.includes(texto) || ciudad.includes(texto);
   });
 
-  // Estado de carga
   if (loading) {
     return (
       <div
@@ -71,7 +64,6 @@ function ListaClientes() {
     );
   }
 
-  // Estado de error
   if (error) {
     return (
       <Alert severity="error">
@@ -80,7 +72,6 @@ function ListaClientes() {
     );
   }
 
-  // Estado de éxito
   return (
     <>
       <h2>Lista de Clientes</h2>
