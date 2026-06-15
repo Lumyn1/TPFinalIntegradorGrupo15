@@ -8,38 +8,17 @@ import {
   TableRow,
   Paper,
   TextField,
-  CircularProgress,
-  Alert,
 } from "@mui/material";
 
 function ListaClientes() {
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const obtenerClientes = async () => {
-      try {
-        setLoading(true);
-        setError(false);
-
-        const respuesta = await fetch(
-          "https://fakestoreapi.com/users"
-        );
-
-        const data = await respuesta.json();
-
-        setClientes(data);
-      } catch (err) {
-        console.error(err);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    obtenerClientes();
+    fetch("https://fakestoreapi.com/users")
+      .then((res) => res.json())
+      .then((data) => setClientes(data))
+      .catch((error) => console.error(error));
   }, []);
 
   const clientesFiltrados = clientes.filter((cliente) => {
@@ -47,37 +26,9 @@ function ListaClientes() {
     const ciudad = cliente.address.city.toLowerCase();
     const texto = busqueda.toLowerCase();
 
-    return (
-      apellido.includes(texto) ||
-      ciudad.includes(texto)
-    );
+    return apellido.includes(texto) || ciudad.includes(texto);
   });
 
-  // Estado de carga
-  if (loading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "50px",
-        }}
-      >
-        <CircularProgress />
-      </div>
-    );
-  }
-
-  // Estado de error
-  if (error) {
-    return (
-      <Alert severity="error">
-        Error al cargar los clientes.
-      </Alert>
-    );
-  }
-
-  // Estado de éxito
   return (
     <>
       <h2>Lista de Clientes</h2>
@@ -108,8 +59,7 @@ function ListaClientes() {
               <TableRow key={cliente.id}>
                 <TableCell>{cliente.id}</TableCell>
                 <TableCell>
-                  {cliente.name.firstname}{" "}
-                  {cliente.name.lastname}
+                  {cliente.name.firstname} {cliente.name.lastname}
                 </TableCell>
                 <TableCell>{cliente.email}</TableCell>
                 <TableCell>{cliente.phone}</TableCell>
