@@ -127,7 +127,7 @@ const DetalleCliente = () => {
           </Button>
 
           {/* RENDERIZADO CONDICIONAL: Solo Gerencia ve este botón */}
-          {admin?.sector === "Gerencia" && (
+          {admin?.rol === "Gerencia" && (
             <Button variant="contained" color="error" onClick={handleEliminar}>
               Eliminar Cliente
             </Button>
