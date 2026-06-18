@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import "../css/DetalleCliente.css";
 import {
   Container,
   Paper,
@@ -72,70 +73,108 @@ const DetalleCliente = () => {
 
   const { address, username, password, email, name } = cliente;
 
-  return (
-    <Container maxWidth="sm" sx={{ mt: 5 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Ficha del Cliente #{cliente.id}
+return (
+  <Container
+    maxWidth="sm"
+    className="detalle-container"
+  >
+    <Paper
+      elevation={3}
+      className="detalle-paper"
+    >
+      <Typography
+        variant="h4"
+        gutterBottom
+        className="detalle-title"
+      >
+        Ficha del Cliente #{cliente.id}
+      </Typography>
+
+      <Box className="detalle-section">
+        <Typography variant="h6" color="primary">
+          Datos Personales
         </Typography>
 
-        {/* Datos Generales */}
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h6" color="primary">
-            Datos Personales
-          </Typography>
-          <Typography>
-            <strong>Nombre:</strong> {name.firstname} {name.lastname}
-          </Typography>
-          <Typography>
-            <strong>Email:</strong> {email}
-          </Typography>
-        </Box>
+        <Typography>
+          <strong>Nombre:</strong>
+          {" "}
+          {name.firstname}
+          {" "}
+          {name.lastname}
+        </Typography>
 
-        {/* Datos Anidados: Dirección */}
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h6" color="primary">
-            Dirección
-          </Typography>
-          <Typography>
-            <strong>Calle:</strong> {address.street} {address.number}
-          </Typography>
-          <Typography>
-            <strong>Ciudad:</strong> {address.city}
-          </Typography>
-          <Typography>
-            <strong>Código Postal:</strong> {address.zipcode}
-          </Typography>
-        </Box>
+        <Typography>
+          <strong>Email:</strong>
+          {" "}
+          {email}
+        </Typography>
+      </Box>
 
-        {/* Datos Anidados: Credenciales */}
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h6" color="primary">
-            Credenciales de Acceso
-          </Typography>
-          <Typography>
-            <strong>Usuario:</strong> {username}
-          </Typography>
-          <Typography>
-            <strong>Contraseña:</strong> {password}
-          </Typography>
-        </Box>
+      <Box className="detalle-section">
+        <Typography variant="h6" color="primary">
+          Dirección
+        </Typography>
 
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
-          <Button variant="outlined" onClick={() => navigate("/clientes")}>
-            Volver a la lista
+        <Typography>
+          <strong>Calle:</strong>
+          {" "}
+          {address.street}
+          {" "}
+          {address.number}
+        </Typography>
+
+        <Typography>
+          <strong>Ciudad:</strong>
+          {" "}
+          {address.city}
+        </Typography>
+
+        <Typography>
+          <strong>Código Postal:</strong>
+          {" "}
+          {address.zipcode}
+        </Typography>
+      </Box>
+
+      <Box className="detalle-section">
+        <Typography variant="h6" color="primary">
+          Credenciales de Acceso
+        </Typography>
+
+        <Typography>
+          <strong>Usuario:</strong>
+          {" "}
+          {username}
+        </Typography>
+
+        <Typography>
+          <strong>Contraseña:</strong>
+          {" "}
+          {password}
+        </Typography>
+      </Box>
+
+      <Box className="detalle-buttons">
+        <Button
+          variant="outlined"
+          onClick={() => navigate("/clientes")}
+        >
+          Volver a la lista
+        </Button>
+
+        {admin?.rol === "Gerencia" && (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleEliminar}
+          >
+            Eliminar Cliente
           </Button>
-
-          {/* RENDERIZADO CONDICIONAL: Solo Gerencia ve este botón */}
-          {admin?.rol === "Gerencia" && (
-            <Button variant="contained" color="error" onClick={handleEliminar}>
-              Eliminar Cliente
-            </Button>
-          )}
-        </Box>
-      </Paper>
-    </Container>
-  );
+        )}
+      </Box>
+    </Paper>
+  </Container>
+);
 };
 
 export default DetalleCliente;

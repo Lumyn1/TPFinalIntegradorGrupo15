@@ -1,0 +1,28 @@
+.detalle-container {
+  margin-top: 40px;
+}
+
+.detalle-paper {
+  padding: 30px !important;
+  border-radius: 15px !important;
+  background-color: #ffffff !important;
+}
+
+.detalle-title {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 25px !important;
+}
+
+.detalle-section {
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #f8fafc;
+  border-radius: 10px;
+}
+
+.detalle-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
