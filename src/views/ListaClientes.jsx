@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -10,6 +11,7 @@ import {
   TextField,
   CircularProgress,
   Alert,
+  Button,
 } from "@mui/material";
 
 function ListaClientes() {
@@ -17,16 +19,14 @@ function ListaClientes() {
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const obtenerClientes = async () => {
       try {
         setLoading(true);
         setError(false);
 
-        const respuesta = await fetch(
-          "https://fakestoreapi.com/users"
-        );
+        const respuesta = await fetch("https://fakestoreapi.com/users");
 
         const data = await respuesta.json();
 
@@ -65,11 +65,7 @@ function ListaClientes() {
   }
 
   if (error) {
-    return (
-      <Alert severity="error">
-        Error al cargar los clientes.
-      </Alert>
-    );
+    return <Alert severity="error">Error al cargar los clientes.</Alert>;
   }
 
   return (
@@ -94,6 +90,7 @@ function ListaClientes() {
               <TableCell>Email</TableCell>
               <TableCell>Teléfono</TableCell>
               <TableCell>Ciudad</TableCell>
+              <TableCell align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
 
@@ -107,6 +104,16 @@ function ListaClientes() {
                 <TableCell>{cliente.email}</TableCell>
                 <TableCell>{cliente.phone}</TableCell>
                 <TableCell>{cliente.address.city}</TableCell>
+                <TableCell align="center">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => navigate(`/clientes/${cliente.id}`)}
+                  >
+                    Ver Detalles
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
