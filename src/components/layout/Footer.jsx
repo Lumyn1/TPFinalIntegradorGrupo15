@@ -1,14 +1,8 @@
-export const Footer = () => {
+import "../../css/Footer.css";
+
+const Footer = () => {
   return (
-    <footer
-      style={{
-        textAlign: "center",
-        padding: "20px",
-        marginTop: "30px",
-        borderTop: "1px solid #ccc",
-        backgroundColor: "#f8f9fa",
-      }}
-    >
+    <footer className="footer">
       <h4>Panel de Control de Clientes</h4>
 
       <p>Trabajo Práctico Integrador - Programación Visual</p>
