@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react';
 import { AdminContext } from '../context/AdminContext';
 import { useNavigate } from 'react-router-dom';
+import { Select, MenuItem } from '@mui/material';
+import "../css/Login.css";
 
 export const Login = () => {
     const { login } = useContext(AdminContext);
@@ -49,11 +51,16 @@ export const Login = () => {
                     required 
                 />
 
-                {/* PARCHE 4: El menú desplegable en la interfaz visual */}
-                <select value={sector} onChange={(e) => setSector(e.target.value)} required>
-                    <option value="Soporte">Soporte</option>
-                    <option value="Gerencia">Gerencia</option>
-                </select>
+                {/* PARCHE 4: El menú desplegable, ahora con MUI Select */}
+                <Select
+                    className="login-select"
+                    value={sector}
+                    onChange={(e) => setSector(e.target.value)}
+                    required
+                >
+                    <MenuItem value="Soporte">Soporte</MenuItem>
+                    <MenuItem value="Gerencia">Gerencia</MenuItem>
+                </Select>
                 
                 <button type="submit">Ingresar</button>
             </form>
