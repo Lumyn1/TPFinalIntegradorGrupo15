@@ -8,18 +8,21 @@ export const Login = () => {
     
     const [usuario, setUsuario] = useState('');
     const [password, setPassword] = useState('');
+    // PARCHE 2: Agregamos el estado del sector que faltaba
+    const [sector, setSector] = useState('Soporte'); 
     const [error, setError] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setError(''); // Limpia estados de error previos
+        setError(''); 
 
-        const response = login(usuario, password);
+        // PARCHE 3: Le mandamos los TRES datos al Contexto
+        const response = login(usuario, password, sector);
 
         if (response.success) {
-            navigate('/clientes'); // Redirección al panel autorizado
+            navigate('/clientes'); 
         } else {
-            setError(response.message); // Inyección del error en el estado local
+            setError(response.message); 
         }
     };
 
@@ -45,6 +48,12 @@ export const Login = () => {
                     onChange={(e) => setPassword(e.target.value)} 
                     required 
                 />
+
+                {/* PARCHE 4: El menú desplegable en la interfaz visual */}
+                <select value={sector} onChange={(e) => setSector(e.target.value)} required>
+                    <option value="Soporte">Soporte</option>
+                    <option value="Gerencia">Gerencia</option>
+                </select>
                 
                 <button type="submit">Ingresar</button>
             </form>
