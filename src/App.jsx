@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AdminProvider, AdminContext } from "./context/AdminContext";
 
+import { Footer } from "./components/layout/Footer.jsx";
 import Header from "./components/layout/Header.jsx";
 
 import { Login } from "./views/Login";
@@ -76,12 +77,11 @@ export const App = () => {
             }
           />
 
-
         </Routes>
 
+        <Footer />
 
       </BrowserRouter>
-
 
     </AdminProvider>
   );
