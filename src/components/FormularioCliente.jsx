@@ -10,7 +10,7 @@ import {
   Alert 
 } from "@mui/material";
 
-export const FormularioCliente = () => {
+export const FormularioCliente = ({ onClienteCreado }) => {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -58,10 +58,48 @@ export const FormularioCliente = () => {
 
       // Axios procesa el JSON automáticamente y guarda la respuesta en la propiedad .data
       if (respuesta.status === 200 || respuesta.status === 201) {
-        const idAsignado = respuesta.data.id;
+        // generamos un ID secuencial que continúa después del 10
+        // (los IDs 1-10 ya los usa la API de FakeStoreAPI)
+        const clientesGuardados = JSON.parse(localStorage.getItem("clientesNuevos")) || [];
+
+        const idMasAlto = clientesGuardados.reduce(
+          (max, c) => (c.id > max ? c.id : max),
+          10
+        );
+        const idAsignado = idMasAlto + 1;
+
+        // arma el objeto cliente con la misma forma que espera la tabla
+        const clienteCreado = {
+          id: idAsignado,
+          email: formData.email,
+          username: formData.username,
+          password: formData.password,
+          name: {
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+          },
+          address: {
+            city: formData.city,
+            street: "N/A",
+            number: 0,
+            zipcode: "N/A",
+            geolocation: { lat: "0", long: "0" },
+          },
+          phone: formData.phone,
+        };
+
+        // avisa al padre (ListaClientes) que hay un cliente nuevo
+        if (onClienteCreado) {
+          onClienteCreado(clienteCreado);
+        }
+
+        // persiste el cliente en localStorage para que sobreviva
+        // a la navegación y a recargar la página (F5)
+        clientesGuardados.push(clienteCreado);
+        localStorage.setItem("clientesNuevos", JSON.stringify(clientesGuardados));
 
         //Feedback visual inyectando el ID en el Snackbar
-        setMensajeExito(`¡Cliente creado exitosamente! ID asignado por el servidor: ${idAsignado}`);
+        setMensajeExito(`¡Cliente creado exitosamente! ID asignado: ${idAsignado}`);
         setOpenSnackbar(true);
 
         // Reseteamos el formulario limpiando los campos
