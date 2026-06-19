@@ -25,12 +25,37 @@ const DetalleCliente = () => {
 
   useEffect(() => {
     const obtenerCliente = async () => {
+      setCargando(true);
+      setError(null);
+
+      // NUEVO: primero revisamos si es un cliente local (creado por el
+      // formulario). Si está, lo mostramos directo y no llamamos a la API.
+      const clientesGuardados = JSON.parse(localStorage.getItem("clientesNuevos")) || [];
+      const clienteLocal = clientesGuardados.find(
+        (c) => String(c.id) === String(id)
+      );
+
+      if (clienteLocal) {
+        setCliente(clienteLocal);
+        setCargando(false);
+        return;
+      }
+
+      // Si no es local, recién ahí intentamos traerlo de la API
       try {
         const respuesta = await fetch(`https://fakestoreapi.com/users/${id}`);
         if (!respuesta.ok)
           throw new Error("Error al traer los datos del cliente");
 
         const datos = await respuesta.json();
+
+        // NUEVO: FakeStoreAPI a veces responde 200 con un objeto vacío
+        // para IDs inexistentes. Si no tiene "name", lo tratamos como
+        // cliente no encontrado en vez de intentar renderizarlo.
+        if (!datos || !datos.name) {
+          throw new Error("Cliente no encontrado");
+        }
+
         setCliente(datos);
       } catch (err) {
         setError(err.message);
@@ -44,7 +69,20 @@ const DetalleCliente = () => {
 
   const handleEliminar = async () => {
     try {
-      await fetch(`https://fakestoreapi.com/users/${id}`, { method: "DELETE" });
+      // si el cliente es local (creado por el formulario), lo borramos
+      // de localStorage en vez de pedirle el DELETE a la API
+      const clientesGuardados = JSON.parse(localStorage.getItem("clientesNuevos")) || [];
+      const esLocal = clientesGuardados.some((c) => String(c.id) === String(id));
+
+      if (esLocal) {
+        const actualizados = clientesGuardados.filter(
+          (c) => String(c.id) !== String(id)
+        );
+        localStorage.setItem("clientesNuevos", JSON.stringify(actualizados));
+      } else {
+        await fetch(`https://fakestoreapi.com/users/${id}`, { method: "DELETE" });
+      }
+
       alert("¡Cliente eliminado con éxito! (Simulación)");
       navigate("/clientes"); // Volvemos a la lista
     } catch {

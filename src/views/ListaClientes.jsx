@@ -32,7 +32,10 @@ function ListaClientes() {
         const respuesta = await fetch("https://fakestoreapi.com/users");
         const data = await respuesta.json();
 
-        setClientes(data);
+        // NUEVO: traemos los clientes creados localmente y los sumamos
+        const clientesGuardados = JSON.parse(localStorage.getItem("clientesNuevos")) || [];
+
+        setClientes([...data, ...clientesGuardados]);
       } catch (err) {
         console.error(err);
         setError(true);
@@ -51,6 +54,11 @@ function ListaClientes() {
 
     return apellido.includes(texto) || ciudad.includes(texto);
   });
+
+  // agrega el cliente recién creado al estado local
+  const handleClienteCreado = (clienteNuevo) => {
+    setClientes((prevClientes) => [...prevClientes, clienteNuevo]);
+  };
 
   if (loading) {
     return (
@@ -84,7 +92,7 @@ function ListaClientes() {
         onChange={(e) => setBusqueda(e.target.value)}
       />
 
-      <FormularioCliente />
+      <FormularioCliente onClienteCreado={handleClienteCreado} />
 
       <TableContainer component={Paper} className="tabla-clientes">
         <Table>
