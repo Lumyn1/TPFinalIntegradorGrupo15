@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FormularioCliente } from "../components/FormularioCliente";
 import "../css/ListaClientes.css";
 import {
   Table,
@@ -21,6 +22,7 @@ function ListaClientes() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     const obtenerClientes = async () => {
       try {
@@ -28,7 +30,6 @@ function ListaClientes() {
         setError(false);
 
         const respuesta = await fetch("https://fakestoreapi.com/users");
-
         const data = await respuesta.json();
 
         setClientes(data);
@@ -69,77 +70,67 @@ function ListaClientes() {
     return <Alert severity="error">Error al cargar los clientes.</Alert>;
   }
 
-return (
-  <div className="lista-container">
-    <h2 className="lista-title">
-      Lista de Clientes
-    </h2>
+  return (
+    <div className="lista-container">
+      <h2 className="lista-title">Lista de Clientes</h2>
 
-    <TextField
-      className="lista-buscador"
-      label="Buscar por apellido o ciudad"
-      variant="outlined"
-      fullWidth
-      margin="normal"
-      value={busqueda}
-      onChange={(e) => setBusqueda(e.target.value)}
-    />
+      <TextField
+        className="lista-buscador"
+        label="Buscar por apellido o ciudad"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+      />
 
-    <TableContainer
-      component={Paper}
-      className="tabla-clientes"
-    >
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Nombre Completo</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Teléfono</TableCell>
-            <TableCell>Ciudad</TableCell>
-            <TableCell align="center">
-              Acciones
-            </TableCell>
-          </TableRow>
-        </TableHead>
+      <FormularioCliente />
 
-        <TableBody>
-          {clientesFiltrados.map((cliente) => (
-            <TableRow key={cliente.id}>
-              <TableCell>{cliente.id}</TableCell>
-
-              <TableCell>
-                {cliente.name.firstname}{" "}
-                {cliente.name.lastname}
-              </TableCell>
-
-              <TableCell>{cliente.email}</TableCell>
-
-              <TableCell>{cliente.phone}</TableCell>
-
-              <TableCell>
-                {cliente.address.city}
-              </TableCell>
-
-              <TableCell align="center">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={() =>
-                    navigate(`/clientes/${cliente.id}`)
-                  }
-                >
-                  Ver Detalles
-                </Button>
-              </TableCell>
+      <TableContainer component={Paper} className="tabla-clientes">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Nombre Completo</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Teléfono</TableCell>
+              <TableCell>Ciudad</TableCell>
+              <TableCell align="center">Acciones</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </div>
-);
+          </TableHead>
+
+          <TableBody>
+            {clientesFiltrados.map((cliente) => (
+              <TableRow key={cliente.id}>
+                <TableCell>{cliente.id}</TableCell>
+
+                <TableCell>
+                  {cliente.name.firstname} {cliente.name.lastname}
+                </TableCell>
+
+                <TableCell>{cliente.email}</TableCell>
+
+                <TableCell>{cliente.phone}</TableCell>
+
+                <TableCell>{cliente.address.city}</TableCell>
+
+                <TableCell align="center">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => navigate(`/clientes/${cliente.id}`)}
+                  >
+                    Ver Detalles
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  );
 }
 
 export default ListaClientes;
