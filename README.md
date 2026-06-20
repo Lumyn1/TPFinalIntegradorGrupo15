@@ -1,16 +1,21 @@
-# React + Vite
+# TP FINAL INTEGRADOR GRUPO 15 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## INTEGRANTES 
 
-Currently, two official plugins are available:
+.Riveros Luciano Martín - id de GitHub: Lumyn1
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+.Torres Nahuel Tobias - id de GitHub: Torres Nahuel Tobias
 
-## React Compiler
+.Cancino Arturo Luis Eduardo - id de GitHub: EducanXD
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+.Antenor Maximiliano Leandro Cayeteno -id de GitHub mk07088
 
-## Expanding the ESLint configuration
+.Sanchez Esteban Jesus - id de GitHub: Esteban3748
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Este proyecto consiste en el desarrollo de un Panel de Control de Clientes construido como aplicación web mediante React y Vite, en el marco del Trabajo Práctico Integrador de la materia Programación Visual.
+La aplicación permite a un administrador autenticado gestionar la información de clientes en tiempo real, consumiendo de forma asincrónica los datos de la API pública FakeStoreAPI. Entre sus funcionalidades principales se incluyen:
+
+_Autenticación y control de acceso, mediante Context API combinado con persistencia en localStorage, diferenciando administradores del sector Soporte y del sector Gerencia.
+_Listado de clientes con búsqueda dinámica por apellido o ciudad, y manejo de estados de carga, éxito y error.
+_Alta de nuevos clientes mediante peticiones HTTP de tipo POST, con feedback visual inmediato.
+_Ficha detallada por cliente, accesible mediante rutas dinámicas, con visualización de su dirección y credenciales, y permisos diferenciados según el rol del administrador (los usuarios de Gerencia pueden eliminar clientes).

@@ -32,7 +32,6 @@ function ListaClientes() {
         const respuesta = await fetch("https://fakestoreapi.com/users");
         const data = await respuesta.json();
 
-        // NUEVO: traemos los clientes creados localmente y los sumamos
         const clientesGuardados = JSON.parse(localStorage.getItem("clientesNuevos")) || [];
 
         setClientes([...data, ...clientesGuardados]);
@@ -55,7 +54,6 @@ function ListaClientes() {
     return apellido.includes(texto) || ciudad.includes(texto);
   });
 
-  // agrega el cliente recién creado al estado local
   const handleClienteCreado = (clienteNuevo) => {
     setClientes((prevClientes) => [...prevClientes, clienteNuevo]);
   };

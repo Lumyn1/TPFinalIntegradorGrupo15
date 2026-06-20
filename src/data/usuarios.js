@@ -1,4 +1,3 @@
-// Simulamos una base de datos de usuarios autorizados
 export const usuariosDb = [
     { 
         id: 1, 

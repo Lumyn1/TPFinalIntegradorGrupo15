@@ -10,7 +10,6 @@ export const Login = () => {
     
     const [usuario, setUsuario] = useState('');
     const [password, setPassword] = useState('');
-    // PARCHE 2: Agregamos el estado del sector que faltaba
     const [sector, setSector] = useState('Soporte'); 
     const [error, setError] = useState('');
 
@@ -18,7 +17,6 @@ export const Login = () => {
         e.preventDefault();
         setError(''); 
 
-        // PARCHE 3: Le mandamos los TRES datos al Contexto
         const response = login(usuario, password, sector);
 
         if (response.success) {
@@ -51,7 +49,6 @@ export const Login = () => {
                     required 
                 />
 
-                {/* PARCHE 4: El menú desplegable, ahora con MUI Select */}
                 <Select
                     className="login-select"
                     value={sector}

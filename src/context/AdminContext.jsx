@@ -5,7 +5,6 @@ import { usuariosDb } from "../data/usuarios";
 export const AdminContext = createContext();
 
 export const AdminProvider = ({ children }) => {
- //Inicialización directa para que las Rutas no colapsen
   const [admin, setAdmin] = useState(() => {
     try {
       const storedAdmin = localStorage.getItem("admin");
@@ -16,14 +15,12 @@ export const AdminProvider = ({ children }) => {
     }
   });
 
-  // Login (Recibe usuario, password y el sector del menú desplegable)
   const login = (usuario, password, sector) => {
     const usuarioEncontrado = usuariosDb.find(
       (u) => u.usuario === usuario && u.password === password
     );
 
     if (usuarioEncontrado) {
-      // Validación estricta del menú desplegable
       if (usuarioEncontrado.rol !== sector) {
         return { 
           success: false, 
@@ -33,7 +30,6 @@ export const AdminProvider = ({ children }) => {
 
       setAdmin(usuarioEncontrado);
 
-      // Guardar sesión en localStorage
       localStorage.setItem("admin", JSON.stringify(usuarioEncontrado));
 
       return { success: true };
@@ -45,7 +41,6 @@ export const AdminProvider = ({ children }) => {
     };
   };
 
-  // Logout
   const logout = () => {
     setAdmin(null);
     localStorage.removeItem("admin");
