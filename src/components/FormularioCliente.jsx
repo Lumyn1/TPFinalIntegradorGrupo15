@@ -18,7 +18,10 @@ export const FormularioCliente = ({ onClienteCreado }) => {
     username: "",
     password: "",
     phone: "",
-    city: ""
+    city: "",
+    street : "",
+    number : "",
+    zipcode : "",
   });
 
 
@@ -48,9 +51,9 @@ export const FormularioCliente = ({ onClienteCreado }) => {
         },
         address: {
           city: formData.city,
-          street: "N/A", 
-          number: 0,
-          zipcode: "N/A",
+          street: formData.street,
+          number: formData.number,
+          zipcode: formData.zipcode,
           geolocation: { lat: "0", long: "0" }
         },
         phone: formData.phone
@@ -80,9 +83,9 @@ export const FormularioCliente = ({ onClienteCreado }) => {
           },
           address: {
             city: formData.city,
-            street: "N/A",
-            number: 0,
-            zipcode: "N/A",
+            street: formData.street,
+            number: formData.number,
+            zipcode: formData.zipcode,
             geolocation: { lat: "0", long: "0" },
           },
           phone: formData.phone,
@@ -104,7 +107,7 @@ export const FormularioCliente = ({ onClienteCreado }) => {
 
         // Reseteamos el formulario limpiando los campos
         setFormData({
-          firstname: "", lastname: "", email: "", username: "", password: "", phone: "", city: ""
+          firstname: "", lastname: "", email: "", username: "", password: "", phone: "", city: "", street: "", zipcode: "", number: ""
         });
       }
 
@@ -134,7 +137,11 @@ export const FormularioCliente = ({ onClienteCreado }) => {
         <TextField label="Contraseña" type="password" name="password" value={formData.password} onChange={handleChange} required size="small" />
         <TextField label="Teléfono" name="phone" value={formData.phone} onChange={handleChange} required size="small" />
         <TextField label="Ciudad" name="city" value={formData.city} onChange={handleChange} required size="small" />
-        
+        <TextField label="Calle" name="street" value={formData.street} onChange={handleChange} required size="small" />
+        <TextField label="Número" name="number" value={formData.number} onChange={handleChange} required size="small" />
+        <TextField label="Código Postal" name="zipcode" value={formData.zipcode} onChange={handleChange} required size="small" />
+       
+
         <Button type="submit" variant="contained" color="success" sx={{ height: '40px', alignSelf: 'center' }}>
           Registrar Cliente
         </Button>
