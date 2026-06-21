@@ -9,6 +9,12 @@ import {
   Button,
   CircularProgress,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Snackbar,
 } from "@mui/material";
 
 import { AdminContext } from "../context/AdminContext";
@@ -22,15 +28,22 @@ const DetalleCliente = () => {
   const [cliente, setCliente] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [alerta, setAlerta] = useState({
+    abierta: false,
+    mensaje: "",
+    gravedad: "error",
+  });
 
   useEffect(() => {
     const obtenerCliente = async () => {
       setCargando(true);
       setError(null);
 
-      const clientesGuardados = JSON.parse(localStorage.getItem("clientesNuevos")) || [];
+      const clientesGuardados =
+        JSON.parse(localStorage.getItem("clientesNuevos")) || [];
       const clienteLocal = clientesGuardados.find(
-        (c) => String(c.id) === String(id)
+        (c) => String(c.id) === String(id),
       );
 
       if (clienteLocal) {
@@ -60,25 +73,43 @@ const DetalleCliente = () => {
 
     obtenerCliente();
   }, [id]);
-
-  const handleEliminar = async () => {
+  const abrirModal = () => setModalAbierto(true);
+  const cerrarModal = () => setModalAbierto(false);
+  const cerrarAlerta = () => setAlerta({ ...alerta, abierta: false });
+  const handleConfirmarEliminacion = async () => {
     try {
-      const clientesGuardados = JSON.parse(localStorage.getItem("clientesNuevos")) || [];
-      const esLocal = clientesGuardados.some((c) => String(c.id) === String(id));
+      cerrarModal();
+      const clientesGuardados =
+        JSON.parse(localStorage.getItem("clientesNuevos")) || [];
+      const esLocal = clientesGuardados.some(
+        (c) => String(c.id) === String(id),
+      );
 
       if (esLocal) {
         const actualizados = clientesGuardados.filter(
-          (c) => String(c.id) !== String(id)
+          (c) => String(c.id) !== String(id),
         );
         localStorage.setItem("clientesNuevos", JSON.stringify(actualizados));
       } else {
-        await fetch(`https://fakestoreapi.com/users/${id}`, { method: "DELETE" });
+        await fetch(`https://fakestoreapi.com/users/${id}`, {
+          method: "DELETE",
+        });
       }
 
-      alert("¡Cliente eliminado con éxito! (Simulación)");
-      navigate("/clientes");
+      setAlerta({
+        abierta: true,
+        mensaje: "¡Cliente eliminado con éxito!",
+        gravedad: "success",
+      });
+      setTimeout(() => {
+        navigate("/clientes");
+      }, 2000);
     } catch {
-      alert("Hubo un error al eliminar el cliente");
+      setAlerta({
+        abierta: true,
+        mensaje: "Hubo un error al eliminar el cliente",
+        gravedad: "error",
+      });
     }
   };
 
@@ -103,108 +134,111 @@ const DetalleCliente = () => {
 
   const { address, username, password, email, name } = cliente;
 
-return (
-  <Container
-    maxWidth="sm"
-    className="detalle-container"
-  >
-    <Paper
-      elevation={3}
-      className="detalle-paper"
-    >
-      <Typography
-        variant="h4"
-        gutterBottom
-        className="detalle-title"
-      >
-        Ficha del Cliente #{cliente.id}
-      </Typography>
-
-      <Box className="detalle-section">
-        <Typography variant="h6" color="primary">
-          Datos Personales
+  return (
+    <Container maxWidth="sm" className="detalle-container">
+      <Paper elevation={3} className="detalle-paper">
+        <Typography variant="h4" gutterBottom className="detalle-title">
+          Ficha del Cliente #{cliente.id}
         </Typography>
 
-        <Typography>
-          <strong>Nombre:</strong>
-          {" "}
-          {name.firstname}
-          {" "}
-          {name.lastname}
-        </Typography>
+        <Box className="detalle-section">
+          <Typography variant="h6" color="primary">
+            Datos Personales
+          </Typography>
 
-        <Typography>
-          <strong>Email:</strong>
-          {" "}
-          {email}
-        </Typography>
-      </Box>
+          <Typography>
+            <strong>Nombre:</strong> {name.firstname} {name.lastname}
+          </Typography>
 
-      <Box className="detalle-section">
-        <Typography variant="h6" color="primary">
-          Dirección
-        </Typography>
+          <Typography>
+            <strong>Email:</strong> {email}
+          </Typography>
+        </Box>
 
-        <Typography>
-          <strong>Calle:</strong>
-          {" "}
-          {address.street}
-          {" "}
-          {address.number}
-        </Typography>
+        <Box className="detalle-section">
+          <Typography variant="h6" color="primary">
+            Dirección
+          </Typography>
 
-        <Typography>
-          <strong>Ciudad:</strong>
-          {" "}
-          {address.city}
-        </Typography>
+          <Typography>
+            <strong>Calle:</strong> {address.street} {address.number}
+          </Typography>
 
-        <Typography>
-          <strong>Código Postal:</strong>
-          {" "}
-          {address.zipcode}
-        </Typography>
-      </Box>
+          <Typography>
+            <strong>Ciudad:</strong> {address.city}
+          </Typography>
 
-      <Box className="detalle-section">
-        <Typography variant="h6" color="primary">
-          Credenciales de Acceso
-        </Typography>
+          <Typography>
+            <strong>Código Postal:</strong> {address.zipcode}
+          </Typography>
+        </Box>
 
-        <Typography>
-          <strong>Usuario:</strong>
-          {" "}
-          {username}
-        </Typography>
+        <Box className="detalle-section">
+          <Typography variant="h6" color="primary">
+            Credenciales de Acceso
+          </Typography>
 
-        <Typography>
-          <strong>Contraseña:</strong>
-          {" "}
-          {password}
-        </Typography>
-      </Box>
+          <Typography>
+            <strong>Usuario:</strong> {username}
+          </Typography>
 
-      <Box className="detalle-buttons">
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/clientes")}
-        >
-          Volver a la lista
-        </Button>
+          <Typography>
+            <strong>Contraseña:</strong> {password}
+          </Typography>
+        </Box>
 
-        {admin?.rol === "Gerencia" && (
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleEliminar}
-          >
-            Eliminar Cliente
+        <Box className="detalle-buttons">
+          <Button variant="outlined" onClick={() => navigate("/clientes")}>
+            Volver a la lista
           </Button>
-        )}
-      </Box>
-    </Paper>
-  </Container>
-);
+
+          {admin?.rol === "Gerencia" && (
+            <Button variant="contained" color="error" onClick={abrirModal}>
+              Eliminar Cliente
+            </Button>
+          )}
+        </Box>
+      </Paper>
+      <Dialog open={modalAbierto} onClose={cerrarModal}>
+        <DialogTitle>¿Confirmar eliminación?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Estás a punto de eliminar al cliente{" "}
+            <strong>
+              {name.firstname} {name.lastname}
+            </strong>
+            . Esta acción no se puede deshacer. ¿Deseas continuar?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cerrarModal} color="primary">
+            Cancelar
+          </Button>
+          <Button
+            onClick={handleConfirmarEliminacion}
+            color="error"
+            variant="contained"
+          >
+            Sí, eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={alerta.abierta}
+        autoHideDuration={2500}
+        onClose={cerrarAlerta}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={cerrarAlerta}
+          severity={alerta.gravedad}
+          sx={{ width: "100%" }}
+        >
+          {alerta.mensaje}
+        </Alert>
+      </Snackbar>
+    </Container>
+  );
 };
 
 export default DetalleCliente;
