@@ -9,7 +9,6 @@ import { Login } from "../views/Login";
 import ListaClientes from "../views/ListaClientes";
 import DetalleCliente from "../views/DetalleCliente";
 
-// Middleware
 const RutaProtegida = ({ children }) => {
   const { admin } = useContext(AdminContext);
 
