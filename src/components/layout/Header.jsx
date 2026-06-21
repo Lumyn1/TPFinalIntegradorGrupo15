@@ -20,7 +20,7 @@ const Header = () => {
       {admin && (
         <div className="header-info">
           <span>
-            {admin.nombre} - {admin.sector}
+            {admin.nombre} - {admin.rol}
           </span>
 
           <button onClick={cerrarSesion}>
